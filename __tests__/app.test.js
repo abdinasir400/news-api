@@ -37,3 +37,29 @@ describe("GET api/topics",()=>{
             })
     }) 
 })
+
+describe("GET /api/users",()=>{
+    test("return 200 status code and array of object of users", ()=> {
+        return request(app)
+            .get("/api/users")
+            .expect(200)
+            .then(({body})=>{
+                expect(body.users).toBeInstanceOf(Array)
+                expect(body.users.length).toBe(4)
+                body.users.forEach((user)=>{
+                    expect(user).toMatchObject({
+                        username: expect.any(String),
+                    })
+                })
+            })
+    })
+
+    test("404: path not found", ()=> {
+        return request(app)
+            .get("/api/usre")
+            .expect(404)
+            .then(({body})=>{
+                expect(body.msg).toBe('path not found')
+            })
+    }) 
+})
